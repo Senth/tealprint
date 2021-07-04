@@ -20,7 +20,8 @@ setup(
     install_requires=["colored"],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
-        "Topic :: Software Development :: Libraries" "License :: OSI Approved :: MIT License",
+        "Topic :: Software Development :: Libraries",
+        "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
     ],
