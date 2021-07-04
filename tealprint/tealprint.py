@@ -16,6 +16,7 @@ class TealLevel(Enum):
 
 class TealPrint:
     level: TealLevel = TealLevel.info
+    _ascii: bool = False
 
     @staticmethod
     def error(message: str, indent: int = 0, exit: bool = False, print_exception: bool = False):
@@ -84,10 +85,20 @@ class TealPrint:
     @staticmethod
     def _print(message: str, indent: int, color: str, level: TealLevel, exit: bool = False):
         if TealPrint.level.value >= level.value:
-            if indent > 0:
-                message = "".ljust(indent * 4) + message
-            if len(color) > 0:
-                message = f"{color}{message}{attr('reset')}"
-            print(message)
-        if exit:
-            sys.exit(1)
+            try:
+                if indent > 0:
+                    message = "".ljust(indent * 4) + message
+                if len(color) > 0:
+                    message = f"{color}{message}{attr('reset')}"
+
+                if TealPrint._ascii:
+                    message = message.encode("utf-8", "ignore").decode("ascii", "ignore")
+
+                print(message)
+                if exit:
+                    sys.exit(1)
+            except UnicodeEncodeError:
+                # Some consoles can't use utf-8, encode into ascii instead, and use that
+                # in the future
+                TealPrint._ascii = True
+                TealPrint._print(message, indent, color, level, exit)
