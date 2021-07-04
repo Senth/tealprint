@@ -1,13 +1,7 @@
 from __future__ import print_function
 
-from io import TextIOBase
-from typing import TextIO
-
 import pytest
-from mockito import patch, unstub, verifyStubbedInvocationsAreUsed, when
-from mockito.mocking import mock
-from mockito.mockito import verify, verifyZeroInteractions
-from mockito.spying import spy, spy2
+from mockito import spy2, unstub, verify, verifyZeroInteractions
 
 from .tealprint import TealLevel, TealPrint
 
