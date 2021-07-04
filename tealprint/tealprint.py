@@ -1,6 +1,7 @@
 import sys
 import traceback
 from enum import Enum
+from typing import TextIO
 
 from colored import attr, fg
 
@@ -30,11 +31,13 @@ class TealPrint:
             exit (bool): If the program should exit after printing the error
             print_exception (bool): Set to true to print an exception
         """
-        TealPrint._print(message, indent, fg("red"), TealLevel.error)
+        TealPrint._print_on_level(message, indent, fg("red"), TealLevel.error)
         if print_exception:
             exception = traceback.format_exc()
-            TealPrint._print(exception, 0, fg("red"), TealLevel.error)
-        TealPrint._print("!!! Please report this and paste the above message !!!", 0, fg("red"), TealLevel.error, exit)
+            TealPrint._print_on_level(exception, 0, fg("red"), TealLevel.error)
+        TealPrint._print_on_level(
+            "!!! Please report this and paste the above message !!!", 0, fg("red"), TealLevel.error, exit
+        )
         if exit:
             sys.exit(1)
 
@@ -47,7 +50,7 @@ class TealPrint:
             indent (int): How many spaces to indent the message, indents by 4 spaces
             exit (bool): If the program should exit after printing the warning
         """
-        TealPrint._print(message, indent, fg("dark_orange"), TealLevel.warning, exit)
+        TealPrint._print_on_level(message, indent, fg("dark_orange"), TealLevel.warning, exit)
 
     @staticmethod
     def info(message: str, indent: int = 0, color: str = ""):
@@ -58,7 +61,7 @@ class TealPrint:
             indent (int): How many spaces to indent the message, indents by 4 spaces
             color (LogColors): Optional color of the message
         """
-        TealPrint._print(message, indent, color, TealLevel.info)
+        TealPrint._print_on_level(message, indent, color, TealLevel.info)
 
     @staticmethod
     def verbose(message: str, indent: int = 0, color: str = ""):
@@ -69,7 +72,7 @@ class TealPrint:
             indent (int): How many spaces to indent the message, indents by 4 spaces
             color (LogColors): Optional color of the message
         """
-        TealPrint._print(message, indent, color, TealLevel.verbose)
+        TealPrint._print_on_level(message, indent, color, TealLevel.verbose)
 
     @staticmethod
     def debug(message: str, indent: int = 0, color: str = ""):
@@ -80,10 +83,11 @@ class TealPrint:
             indent (int): How many spaces to indent the message, indents by 4 spaces
             color (LogColors): Optional color of the message
         """
-        TealPrint._print(message, indent, color, TealLevel.debug)
+        TealPrint._print_on_level(message, indent, color, TealLevel.debug)
 
     @staticmethod
-    def _print(message: str, indent: int, color: str, level: TealLevel, exit: bool = False):
+    def _print_on_level(message: str, indent: int, color: str, level: TealLevel, exit: bool = False):
+        """Prints the message if the level is equal or lower to the specified"""
         if TealPrint.level.value >= level.value:
             try:
                 if indent > 0:
@@ -94,11 +98,16 @@ class TealPrint:
                 if TealPrint._ascii:
                     message = message.encode("utf-8", "ignore").decode("ascii", "ignore")
 
-                print(message)
+                TealPrint._print(message)
                 if exit:
                     sys.exit(1)
             except UnicodeEncodeError:
                 # Some consoles can't use utf-8, encode into ascii instead, and use that
                 # in the future
                 TealPrint._ascii = True
-                TealPrint._print(message, indent, color, level, exit)
+                TealPrint._print_on_level(message, indent, color, level, exit)
+
+    @staticmethod
+    def _print(message):
+        """Mostly used for mocking purposes"""
+        print(message)

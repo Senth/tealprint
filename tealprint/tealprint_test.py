@@ -1,7 +1,13 @@
 from __future__ import print_function
 
+from io import TextIOBase
+from typing import TextIO
+
 import pytest
 from mockito import patch, unstub, verifyStubbedInvocationsAreUsed, when
+from mockito.mocking import mock
+from mockito.mockito import verify, verifyZeroInteractions
+from mockito.spying import spy, spy2
 
 from .tealprint import TealLevel, TealPrint
 
@@ -33,7 +39,7 @@ from .tealprint import TealLevel, TealPrint
         ),
         (
             "Prints warning+error when level is warning",
-            TealLevel.none,
+            TealLevel.warning,
             [
                 (TealPrint.error, True),
                 (TealPrint.warning, True),
@@ -44,7 +50,7 @@ from .tealprint import TealLevel, TealPrint
         ),
         (
             "Prints info+warning+error when level is info",
-            TealLevel.none,
+            TealLevel.info,
             [
                 (TealPrint.error, True),
                 (TealPrint.warning, True),
@@ -55,7 +61,7 @@ from .tealprint import TealLevel, TealPrint
         ),
         (
             "Prints verbose+info+warning.error when level is verbose",
-            TealLevel.none,
+            TealLevel.verbose,
             [
                 (TealPrint.error, True),
                 (TealPrint.warning, True),
@@ -66,7 +72,7 @@ from .tealprint import TealLevel, TealPrint
         ),
         (
             "Prints everything when level is debug",
-            TealLevel.none,
+            TealLevel.debug,
             [
                 (TealPrint.error, True),
                 (TealPrint.warning, True),
@@ -80,10 +86,16 @@ from .tealprint import TealLevel, TealPrint
 def test_print_level(name: str, level: TealLevel, function_tuple):
     print(name)
 
+    TealPrint.level = level
+
     for function, expected in function_tuple:
-        if expected:
-            patch(print, lambda object: None)
+        spy2(TealPrint._print)
 
         function("message")
+
+        if expected:
+            verify(TealPrint, atleast=1)._print(...)
+        else:
+            verifyZeroInteractions()
 
         unstub()
