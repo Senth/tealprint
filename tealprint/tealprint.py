@@ -19,7 +19,13 @@ class TealPrint:
     _ascii: bool = False
 
     @staticmethod
-    def error(message: str, indent: int = 0, exit: bool = False, print_exception: bool = False):
+    def error(
+        message: str,
+        indent: int = 0,
+        exit: bool = False,
+        print_exception: bool = False,
+        print_report_this: bool = False,
+    ):
         """Recommendation: Only use this when an error occurs and you have to exit the program
            Prints an error message in red, can quit and print an exception.
            Also prints a "Please report this and paste the above message"
@@ -29,14 +35,16 @@ class TealPrint:
             indent (int): How many spaces to indent the message, indents by 4 spaces
             exit (bool): If the program should exit after printing the error
             print_exception (bool): Set to true to print an exception
+            print_report_this (bool): Set to true to add an "Please report this..." message at the end
         """
         TealPrint._print_on_level(message, indent, fg("red"), TealLevel.error)
         if print_exception:
             exception = traceback.format_exc()
             TealPrint._print_on_level(exception, 0, fg("red"), TealLevel.error)
-        TealPrint._print_on_level(
-            "!!! Please report this and paste the above message !!!", 0, fg("red"), TealLevel.error, exit
-        )
+        if print_report_this:
+            TealPrint._print_on_level(
+                "!!! Please report this and paste the above message !!!", 0, fg("red"), TealLevel.error
+            )
         if exit:
             sys.exit(1)
 
