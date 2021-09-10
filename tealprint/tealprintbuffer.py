@@ -1,6 +1,7 @@
 import sys
 import traceback
 from io import StringIO
+from threading import Lock
 
 from colored import attr, fg
 
@@ -8,6 +9,8 @@ from . import TealConfig, TealLevel
 
 
 class TealPrintBuffer:
+    _mutex = Lock()
+
     def __init__(self) -> None:
         self.buffer = StringIO()
 
@@ -125,5 +128,12 @@ class TealPrintBuffer:
     def flush(self) -> None:
         """Prints the messages in the buffer"""
         self.buffer.seek(0)
-        print(self.buffer.read())
+
+        # Make sure we only print one message at a time
+        TealPrintBuffer._mutex.acquire()
+        try:
+            print(self.buffer.read(), flush=True)
+        finally:
+            TealPrintBuffer._mutex.release()
+
         self.buffer = StringIO()
