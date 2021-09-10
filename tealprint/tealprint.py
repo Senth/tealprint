@@ -1,10 +1,3 @@
-import sys
-import traceback
-
-from colored import attr, fg
-
-from .tealconfig import TealConfig
-from .teallevel import TealLevel
 from .tealprintbuffer import TealPrintBuffer
 
 
