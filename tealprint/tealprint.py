@@ -1,7 +1,6 @@
 import sys
 import traceback
 from enum import Enum
-from typing import TextIO
 
 from colored import attr, fg
 
@@ -59,7 +58,7 @@ class TealPrint:
         Args:
             message (str): The message to print
             indent (int): How many spaces to indent the message, indents by 4 spaces
-            color (LogColors): Optional color of the message
+            color (str): Optional color of the message
         """
         TealPrint._print_on_level(message, indent, color, TealLevel.info)
 
@@ -70,7 +69,7 @@ class TealPrint:
         Args:
             message (str): The message to print
             indent (int): How many spaces to indent the message, indents by 4 spaces
-            color (LogColors): Optional color of the message
+            color (str): Optional color of the message
         """
         TealPrint._print_on_level(message, indent, color, TealLevel.verbose)
 
@@ -81,7 +80,7 @@ class TealPrint:
         Args:
             message (str): The message to print
             indent (int): How many spaces to indent the message, indents by 4 spaces
-            color (LogColors): Optional color of the message
+            color (str): Optional color of the message
         """
         TealPrint._print_on_level(message, indent, color, TealLevel.debug)
 
