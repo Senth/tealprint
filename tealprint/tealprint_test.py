@@ -3,7 +3,7 @@ from __future__ import print_function
 import pytest
 from mockito import spy2, unstub, verify, verifyZeroInteractions
 
-from .tealprint import TealLevel, TealPrint
+from . import TealConfig, TealLevel, TealPrint
 
 
 @pytest.mark.parametrize(
@@ -80,7 +80,7 @@ from .tealprint import TealLevel, TealPrint
 def test_print_level(name: str, level: TealLevel, function_tuple):
     print(name)
 
-    TealPrint.level = level
+    TealConfig.level = level
 
     for function, expected in function_tuple:
         spy2(TealPrint._print)

@@ -3,13 +3,11 @@ import traceback
 
 from colored import attr, fg
 
+from .tealconfig import TealConfig
 from .teallevel import TealLevel
 
 
 class TealPrint:
-    level: TealLevel = TealLevel.info
-    _ascii: bool = False
-
     @staticmethod
     def error(
         message: str,
@@ -87,14 +85,14 @@ class TealPrint:
     @staticmethod
     def _print_on_level(message: str, indent: int, color: str, level: TealLevel, exit: bool = False):
         """Prints the message if the level is equal or lower to the specified"""
-        if TealPrint.level.value >= level.value:
+        if TealConfig.level.value >= level.value:
             try:
                 if indent > 0:
                     message = "".ljust(indent * 4) + message
                 if len(color) > 0:
                     message = f"{color}{message}{attr('reset')}"
 
-                if TealPrint._ascii:
+                if TealConfig._ascii:
                     message = message.encode("utf-8", "ignore").decode("ascii", "ignore")
 
                 TealPrint._print(message)
@@ -103,7 +101,7 @@ class TealPrint:
             except UnicodeEncodeError:
                 # Some consoles can't use utf-8, encode into ascii instead, and use that
                 # in the future
-                TealPrint._ascii = True
+                TealConfig._ascii = True
                 TealPrint._print_on_level(message, indent, color, level, exit)
 
     @staticmethod
