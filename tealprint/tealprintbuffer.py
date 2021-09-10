@@ -10,6 +10,7 @@ from . import TealConfig, TealLevel
 
 class TealPrintBuffer:
     _mutex = Lock()
+    _ascii: bool = False
 
     def __init__(self) -> None:
         self.buffer = StringIO()
@@ -108,7 +109,7 @@ class TealPrintBuffer:
                 if len(color) > 0:
                     message = f"{color}{message}{attr('reset')}"
 
-                if TealConfig._ascii:
+                if TealPrintBuffer._ascii:
                     message = message.encode("utf-8", "ignore").decode("ascii", "ignore")
 
                 self._add_to_buffer(message)
@@ -118,7 +119,7 @@ class TealPrintBuffer:
             except UnicodeEncodeError:
                 # Some consoles can't use utf-8, encode into ascii instead, and use that
                 # in the future
-                TealConfig._ascii = True
+                TealPrintBuffer._ascii = True
                 self._add_to_buffer_on_level(message, indent, color, level, exit)
 
     def _add_to_buffer(self, message: str) -> None:
