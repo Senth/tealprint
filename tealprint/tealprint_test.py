@@ -83,12 +83,12 @@ def test_print_level(name: str, level: TealLevel, function_tuple):
     TealConfig.level = level
 
     for function, expected in function_tuple:
-        spy2(TealPrint._print)
+        spy2(TealPrint._buffer._add_to_buffer)
 
         function("message")
 
         if expected:
-            verify(TealPrint, atleast=1)._print(...)
+            verify(TealPrint._buffer, atleast=1)._add_to_buffer(...)
         else:
             verifyZeroInteractions()
 
