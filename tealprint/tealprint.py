@@ -1,17 +1,9 @@
 import sys
 import traceback
-from enum import Enum
 
 from colored import attr, fg
 
-
-class TealLevel(Enum):
-    none = 0  # Prints no message, not even errors
-    error = 1
-    warning = 2
-    info = 3  # Default
-    verbose = 4
-    debug = 5
+from .teallevel import TealLevel
 
 
 class TealPrint:
