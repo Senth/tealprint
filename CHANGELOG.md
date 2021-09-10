@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking Changes
 
 - `tealprint.TealPrint.level` now moved to `tealprint.TealConfig.level`
+- `TealPrint` indentation now is a bool instead of an int. See [#4](https://github.com/Senth/tealprint/issues/4)
 
 ### Changed
 
@@ -19,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Buffer messages and print them all at the same time [#3](https://github.com/Senth/tealprint/issues/3)
 - Change indent spaces and indent character [#5](https://github.com/Senth/tealprint/issues/5)
+- Can now push/pop indentation so that you don't have to keep track of indentation throughout classes [[#4](https://github.com/Senth/tealprint/issues/4)]
 
 ## [0.1.0] - 2021-07-04
 
