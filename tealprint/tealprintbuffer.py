@@ -105,7 +105,7 @@ class TealPrintBuffer:
         if TealConfig.level.value >= level.value:
             try:
                 if indent > 0:
-                    message = "".ljust(indent * 4) + message
+                    message = "".ljust(indent * TealConfig.indent_by, TealConfig.indent_char) + message
                 if len(color) > 0:
                     message = f"{color}{message}{attr('reset')}"
 
