@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Upcoming]
+
+### Breaking Changes
+
+- `tealprint.TealPrint.level` now moved to `tealprint.TealConfig.level`
+
+### Changed
+
+- "Please report this [...]" message in `TealPrint.error()` is now optional, and is not shown by default [#6](https://github.com/Senth/tealprint/issues/6)
+
+### Added
+
+- Buffer messages and print them all at the same time [#3](https://github.com/Senth/tealprint/issues/3)
+- Change indent spaces and indent character [#5](https://github.com/Senth/tealprint/issues/5)
+
 ## [0.1.0] - 2021-07-04
 
 ### Added
