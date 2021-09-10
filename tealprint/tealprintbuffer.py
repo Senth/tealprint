@@ -1,0 +1,2 @@
+class TealPrintBuffer:
+    pass
