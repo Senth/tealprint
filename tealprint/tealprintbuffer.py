@@ -100,8 +100,9 @@ class TealPrintBuffer:
         self.indent_stack.append(level)
 
     def pop_indent(self) -> None:
-        """Remove indentation for all messages. Note that nothing will happen if push_indent() was
-           called with a level that wouldn't be shown.
+        """
+        Remove indentation for all messages. Note that nothing will happen if push_indent() was
+        called with a level that wouldn't be shown.
 
         For example:
             TealConfig.level = TealLevel.info
@@ -115,6 +116,13 @@ class TealPrintBuffer:
             TealPrint.info("Not indentend")
         """
         self.indent_stack.pop()
+
+    def clear_indent(self) -> None:
+        """
+        Removes all indentation. Note that calling pop() will throw an exception now.
+        Recommended to use before exiting the app or returning from an excetpion.
+        """
+        self.indent_stack.clear()
 
     def _add_to_buffer_on_level(
         self,
