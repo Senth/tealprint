@@ -179,7 +179,7 @@ class TealPrintBuffer:
         # Make sure we only print one message at a time
         TealPrintBuffer._mutex.acquire()
         try:
-            print(self.buffer.read(), flush=True)
+            print(self.buffer.read(), flush=True, end="")
         finally:
             TealPrintBuffer._mutex.release()
 
