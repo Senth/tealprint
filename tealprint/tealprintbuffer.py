@@ -152,14 +152,15 @@ class TealPrintBuffer:
                     self.flush()
                     sys.exit(1)
 
-                if push_indent:
-                    self.push_indent(level)
-
             except UnicodeEncodeError:
                 # Some consoles can't use utf-8, encode into ascii instead, and use that
                 # in the future
                 TealPrintBuffer._ascii = True
-                self._add_to_buffer_on_level(message, push_indent, color, level, exit)
+                self._add_to_buffer_on_level(message, False, color, level, exit)
+
+        # Always push indent
+        if push_indent:
+            self.push_indent(level)
 
     def _get_indent_level(self) -> int:
         count = 0
