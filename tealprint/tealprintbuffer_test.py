@@ -76,6 +76,16 @@ class T:
                 T.logger.info("test"),
             ),
         ),
+        (
+            "Always push indent when logging",
+            "Works!\n",
+            lambda: (
+                T.logger.info("Works!", push_indent=True),
+                T.logger.debug("Not shown", push_indent=True),
+                T.logger.pop_indent(),
+                T.logger.pop_indent(),
+            ),
+        ),
     ],
 )
 def test_indentation(name, expected: str, function) -> None:
