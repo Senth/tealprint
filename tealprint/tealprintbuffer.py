@@ -4,7 +4,7 @@ from io import StringIO
 from threading import Lock
 from typing import List
 
-from colored import attr, fg
+from colored import attr
 
 from . import TealConfig, TealLevel
 
@@ -21,6 +21,7 @@ class TealPrintBuffer:
         self,
         message: str,
         push_indent: bool = False,
+        color: str = TealConfig.colors_default.error,
         exit: bool = False,
         print_exception: bool = False,
         print_report_this: bool = False,
@@ -34,23 +35,30 @@ class TealPrintBuffer:
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            color (str): Optional color of the message, defaults to TealConfig.colors_default.error
             exit (bool): If the program should exit after printing the error. Also flushes messages
             print_exception (bool): Set to true to print an exception
             print_report_this (bool): Set to true to add an "Please report this..." message at the end
         """
-        self._add_to_buffer_on_level(message, push_indent, fg("red"), TealLevel.error)
+        self._add_to_buffer_on_level(message, push_indent, color, TealLevel.error)
         if print_exception:
             exception = traceback.format_exc()
-            self._add_to_buffer_on_level(exception, False, fg("red"), TealLevel.error)
+            self._add_to_buffer_on_level(exception, False, color, TealLevel.error)
         if print_report_this:
             self._add_to_buffer_on_level(
-                "!!! Please report this and paste the above message !!!", False, fg("red"), TealLevel.error
+                "!!! Please report this and paste the above message !!!", False, color, TealLevel.error
             )
         if exit:
             self.flush()
             sys.exit(1)
 
-    def warning(self, message: str, push_indent: bool = False, exit: bool = False) -> None:
+    def warning(
+        self,
+        message: str,
+        push_indent: bool = False,
+        color: str = TealConfig.colors_default.warning,
+        exit: bool = False,
+    ) -> None:
         """Add an orange warning message to the buffer.
            If exit=True, it flushes all messages before exiting.
            Call flush() to print the messages.
@@ -58,9 +66,10 @@ class TealPrintBuffer:
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            color (str): Optional color of the message, defaults to TealConfig.colors_default.warning
             exit (bool): If the program should exit after printing the warning. Also flushes messages
         """
-        self._add_to_buffer_on_level(message, push_indent, fg("dark_orange"), TealLevel.warning, exit)
+        self._add_to_buffer_on_level(message, push_indent, color, TealLevel.warning, exit)
 
     def info(self, message: str, push_indent: bool = False, color: str = "") -> None:
         """Add a message to the buffer if TealConfig.level has been set to debug/verbose/info.
