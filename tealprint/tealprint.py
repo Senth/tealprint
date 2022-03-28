@@ -1,3 +1,4 @@
+from .tealconfig import TealConfig
 from .teallevel import TealLevel
 from .tealprintbuffer import TealPrintBuffer
 
@@ -9,6 +10,7 @@ class TealPrint:
     def error(
         message: str,
         push_indent: bool = False,
+        color: str = TealConfig.colors_default.error,
         exit: bool = False,
         print_exception: bool = False,
         print_report_this: bool = False,
@@ -24,11 +26,23 @@ class TealPrint:
             print_exception (bool): Set to true to print an exception
             print_report_this (bool): Set to true to add an "Please report this..." message at the end
         """
-        TealPrint._buffer.error(message, push_indent, exit, print_exception, print_report_this)
+        TealPrint._buffer.error(
+            message,
+            push_indent=push_indent,
+            color=color,
+            exit=exit,
+            print_exception=print_exception,
+            print_report_this=print_report_this,
+        )
         TealPrint._buffer.flush()
 
     @staticmethod
-    def warning(message: str, push_indent: bool = False, exit: bool = False):
+    def warning(
+        message: str,
+        push_indent: bool = False,
+        color: str = TealConfig.colors_default.warning,
+        exit: bool = False,
+    ):
         """Prints an orange warning message message
 
         Args:
@@ -36,7 +50,7 @@ class TealPrint:
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
             exit (bool): If the program should exit after printing the warning
         """
-        TealPrint._buffer.warning(message, push_indent, exit)
+        TealPrint._buffer.warning(message, push_indent=push_indent, color=color, exit=exit)
         TealPrint._buffer.flush()
 
     @staticmethod
