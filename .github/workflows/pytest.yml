@@ -1,6 +1,5 @@
 # This workflow will install Python dependencies and run tests with a variety of Python versions
 
-
 name: Tests
 
 on:
@@ -14,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.9']
+        python-version: ['3.8', '3.9', '3.10']
 
     name: Python ${{ matrix.python-version }}
 
@@ -32,4 +31,3 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
-
