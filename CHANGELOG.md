@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Upcoming]
+
+### Breaking Changes
+
+- Added argument color to error and warning [#22](https://github.com/Senth/tealprint/issues/22)
+
+### Added
+
+- Ability to set default color for error and warning [#22](https://github.com/Senth/tealprint/issues/22)
+
+## [0.2.2] - 2022-03-21
+
+### Added
+
+- Add support for Python 3.10
+
 ## [0.2.1] - 2021-11-04
 
 ### Fixed
