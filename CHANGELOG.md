@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking Changes
 
 - Added argument color to error and warning [#22](https://github.com/Senth/tealprint/issues/22)
+- Added pop_indent to arguments [#21](https://github.com/Senth/tealprint/issues/21)
 
 ### Added
 

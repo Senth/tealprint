@@ -21,6 +21,7 @@ class TealPrintBuffer:
         self,
         message: str,
         push_indent: bool = False,
+        pop_indent: bool = False,
         color: str = TealConfig.colors_default.error,
         exit: bool = False,
         print_exception: bool = False,
@@ -35,18 +36,19 @@ class TealPrintBuffer:
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            pop_indent (bool): If messages after this should be unindented by one level. Call push_indent() to indent
             color (str): Optional color of the message, defaults to TealConfig.colors_default.error
             exit (bool): If the program should exit after printing the error. Also flushes messages
             print_exception (bool): Set to true to print an exception
             print_report_this (bool): Set to true to add an "Please report this..." message at the end
         """
-        self._add_to_buffer_on_level(message, push_indent, color, TealLevel.error)
+        self._add_to_buffer_on_level(message, push_indent, pop_indent, color, TealLevel.error)
         if print_exception:
             exception = traceback.format_exc()
-            self._add_to_buffer_on_level(exception, False, color, TealLevel.error)
+            self._add_to_buffer_on_level(exception, False, False, color, TealLevel.error)
         if print_report_this:
             self._add_to_buffer_on_level(
-                "!!! Please report this and paste the above message !!!", False, color, TealLevel.error
+                "!!! Please report this and paste the above message !!!", False, False, color, TealLevel.error
             )
         if exit:
             self.flush()
@@ -56,6 +58,7 @@ class TealPrintBuffer:
         self,
         message: str,
         push_indent: bool = False,
+        pop_indent: bool = False,
         color: str = TealConfig.colors_default.warning,
         exit: bool = False,
     ) -> None:
@@ -66,43 +69,47 @@ class TealPrintBuffer:
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            pop_indent (bool): If messages after this should be unindented by one level. Call push_indent() to indent
             color (str): Optional color of the message, defaults to TealConfig.colors_default.warning
             exit (bool): If the program should exit after printing the warning. Also flushes messages
         """
-        self._add_to_buffer_on_level(message, push_indent, color, TealLevel.warning, exit)
+        self._add_to_buffer_on_level(message, push_indent, pop_indent, color, TealLevel.warning, exit)
 
-    def info(self, message: str, push_indent: bool = False, color: str = "") -> None:
+    def info(self, message: str, push_indent: bool = False, pop_indent: bool = False, color: str = "") -> None:
         """Add a message to the buffer if TealConfig.level has been set to debug/verbose/info.
            Call flush() to print the messages.
 
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            pop_indent (bool): If messages after this should be unindented by one level. Call push_indent() to indent
             color (str): Optional color of the message
         """
-        self._add_to_buffer_on_level(message, push_indent, color, TealLevel.info)
+        self._add_to_buffer_on_level(message, push_indent, pop_indent, color, TealLevel.info)
 
-    def verbose(self, message: str, push_indent: bool = False, color: str = "") -> None:
+    def verbose(self, message: str, push_indent: bool = False, pop_indent: bool = False, color: str = "") -> None:
         """Add a message to the buffer if TealConfig.level has been set to debug/verbose.
            Call flush() to print the messages.
 
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            pop_indent (bool): If messages after this should be unindented by one level. Call push_indent() to indent
             color (str): Optional color of the message
         """
-        self._add_to_buffer_on_level(message, push_indent, color, TealLevel.verbose)
+        self._add_to_buffer_on_level(message, push_indent, pop_indent, color, TealLevel.verbose)
 
-    def debug(self, message: str, push_indent: bool = False, color: str = "") -> None:
+    def debug(self, message: str, push_indent: bool = False, pop_indent: bool = False, color: str = "") -> None:
         """Add a message to the buffer if the TealConfig.level has been set to debug.
            Call flush() to print the messages.
 
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            pop_indent (bool): If messages after this should be unindented by one level. Call push_indent() to indent
             color (str): Optional color of the message
         """
-        self._add_to_buffer_on_level(message, push_indent, color, TealLevel.debug)
+        self._add_to_buffer_on_level(message, push_indent, pop_indent, color, TealLevel.debug)
 
     def push_indent(self, level: TealLevel) -> None:
         """Add indentation for all messages, but only if level is would be shown"""
@@ -137,6 +144,7 @@ class TealPrintBuffer:
         self,
         message: str,
         push_indent: bool,
+        pop_indent: bool,
         color: str,
         level: TealLevel,
         exit: bool = False,
@@ -165,11 +173,14 @@ class TealPrintBuffer:
                 # Some consoles can't use utf-8, encode into ascii instead, and use that
                 # in the future
                 TealPrintBuffer._ascii = True
-                self._add_to_buffer_on_level(message, False, color, level, exit)
+                self._add_to_buffer_on_level(message, False, False, color, level, exit)
 
         # Always push indent
         if push_indent:
             self.push_indent(level)
+        # Always pop indent
+        if pop_indent:
+            self.pop_indent()
 
     def _get_indent_level(self) -> int:
         count = 0
