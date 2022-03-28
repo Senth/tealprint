@@ -40,7 +40,7 @@ class T:
         ),
         (
             "Not Indented when when pushed with same lever",
-            f"test\n",
+            "test\n",
             lambda: (
                 T.logger.push_indent(TealLevel.verbose),
                 T.logger.info("test"),
@@ -69,7 +69,7 @@ class T:
         ),
         (
             "No indent after cleaning",
-            f"test\n",
+            "test\n",
             lambda: (
                 T.logger.push_indent(TealLevel.info),
                 T.logger.clear_indent(),
