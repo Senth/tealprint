@@ -47,11 +47,12 @@ class T:
             ),
         ),
         (
-            "Indented when when pushed in info()",
-            f"first\n{indent}test\n",
+            "Indented and unindent directly in info()",
+            f"first\n{indent}test\nthird\n",
             lambda: (
                 T.logger.info("first", push_indent=True),
-                T.logger.info("test"),
+                T.logger.info("test", pop_indent=True),
+                T.logger.info("third"),
             ),
         ),
         (

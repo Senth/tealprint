@@ -10,6 +10,7 @@ class TealPrint:
     def error(
         message: str,
         push_indent: bool = False,
+        pop_indent: bool = False,
         color: str = TealConfig.colors_default.error,
         exit: bool = False,
         print_exception: bool = False,
@@ -22,17 +23,19 @@ class TealPrint:
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            pop_indent (bool): If messages after this should be unindented by one level. Call push_indent() to indent
             exit (bool): If the program should exit after printing the error
             print_exception (bool): Set to true to print an exception
             print_report_this (bool): Set to true to add an "Please report this..." message at the end
         """
         TealPrint._buffer.error(
             message,
-            push_indent=push_indent,
-            color=color,
-            exit=exit,
-            print_exception=print_exception,
-            print_report_this=print_report_this,
+            push_indent,
+            pop_indent,
+            color,
+            exit,
+            print_exception,
+            print_report_this,
         )
         TealPrint._buffer.flush()
 
@@ -40,6 +43,7 @@ class TealPrint:
     def warning(
         message: str,
         push_indent: bool = False,
+        pop_indent: bool = False,
         color: str = TealConfig.colors_default.warning,
         exit: bool = False,
     ):
@@ -48,45 +52,49 @@ class TealPrint:
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            pop_indent (bool): If messages after this should be unindented by one level. Call push_indent() to indent
             exit (bool): If the program should exit after printing the warning
         """
-        TealPrint._buffer.warning(message, push_indent=push_indent, color=color, exit=exit)
+        TealPrint._buffer.warning(message, push_indent, pop_indent, color, exit)
         TealPrint._buffer.flush()
 
     @staticmethod
-    def info(message: str, push_indent: bool = False, color: str = ""):
+    def info(message: str, push_indent: bool = False, pop_indent: bool = False, color: str = ""):
         """Print a message if TealPrint.level has been set to debug/verbose/info
 
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            pop_indent (bool): If messages after this should be unindented by one level. Call push_indent() to indent
             color (str): Optional color of the message
         """
-        TealPrint._buffer.info(message, push_indent, color)
+        TealPrint._buffer.info(message, push_indent, pop_indent, color)
         TealPrint._buffer.flush()
 
     @staticmethod
-    def verbose(message: str, push_indent: bool = False, color: str = ""):
+    def verbose(message: str, push_indent: bool = False, pop_indent: bool = False, color: str = ""):
         """Prints a message if TealPrint.level has been set to debug/verbose
 
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            pop_indent (bool): If messages after this should be unindented by one level. Call push_indent() to indent
             color (str): Optional color of the message
         """
-        TealPrint._buffer.verbose(message, push_indent, color)
+        TealPrint._buffer.verbose(message, push_indent, pop_indent, color)
         TealPrint._buffer.flush()
 
     @staticmethod
-    def debug(message: str, push_indent: bool = False, color: str = ""):
+    def debug(message: str, push_indent: bool = False, pop_indent: bool = False, color: str = ""):
         """Prints a message if the TealPrint.level has been set to debug
 
         Args:
             message (str): The message to print
             push_indent (bool): If messages after this should be indented by one level. Call pop_indent() to unindent
+            pop_indent (bool): If messages after this should be unindented by one level. Call push_indent() to indent
             color (str): Optional color of the message
         """
-        TealPrint._buffer.debug(message, push_indent, color)
+        TealPrint._buffer.debug(message, push_indent, pop_indent, color)
         TealPrint._buffer.flush()
 
     @staticmethod
