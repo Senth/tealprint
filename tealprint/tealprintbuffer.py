@@ -1,3 +1,4 @@
+import re
 import sys
 import traceback
 from io import StringIO
@@ -159,8 +160,13 @@ class TealPrintBuffer:
                 if len(color) > 0:
                     message = f"{color}{message}{attr('reset')}"
 
-                # Convert to ascii if necessary
-                if TealPrintBuffer._ascii:
+                # Remove colors if not supported
+                if not TealConfig.colors_enabled or not TealConfig.unicode_enabled:
+                    message = TealPrintBuffer._remove_colors_from_string(message)
+
+                # Convert to ascii if unicode is disabled or not supported
+                if not TealConfig.unicode_enabled:
+                    message = TealPrintBuffer._remove_unicode_from_string(message)
                     message = message.encode("utf-8", "ignore").decode("ascii", "ignore")
 
                 self._add_to_buffer(message)
@@ -172,7 +178,7 @@ class TealPrintBuffer:
             except UnicodeEncodeError:
                 # Some consoles can't use utf-8, encode into ascii instead, and use that
                 # in the future
-                TealPrintBuffer._ascii = True
+                TealConfig.unicode_enabled = False
                 self._add_to_buffer_on_level(message, False, False, color, level, exit)
 
         # Always push indent
@@ -205,3 +211,13 @@ class TealPrintBuffer:
             TealPrintBuffer._mutex.release()
 
         self.buffer = StringIO()
+
+    @staticmethod
+    def _remove_unicode_from_string(string: str) -> str:
+        """Remove all unicode characters from a string"""
+        return "".join(c for c in string if ord(c) < 128)
+
+    @staticmethod
+    def _remove_colors_from_string(string: str) -> str:
+        """Removes all color characters from a string"""
+        return re.sub(r"\x1b\[\d+m", "", string)

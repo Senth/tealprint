@@ -1,4 +1,5 @@
 import pytest
+from colored import fg
 
 from . import TealConfig, TealLevel, TealPrintBuffer
 
@@ -98,4 +99,30 @@ def test_indentation(name, expected: str, function) -> None:
     result = T.logger.buffer.read()
     assert expected == result
 
+    T.reset()
+
+
+def test_remove_unicode() -> None:
+    TealConfig.unicode_enabled = False
+
+    T.logger.info("🔥 Rocket 🔥", color=fg("red"))
+
+    T.logger.buffer.seek(0)
+    result = T.logger.buffer.read()
+    assert " Rocket \n" == result
+
+    TealConfig.reset()
+    T.reset()
+
+
+def test_remove_colors() -> None:
+    TealConfig.colors_enabled = False
+
+    T.logger.info("🔥 Rocket 🔥", color=fg("red"))
+
+    T.logger.buffer.seek(0)
+    result = T.logger.buffer.read()
+    assert "🔥 Rocket 🔥\n" == result
+
+    TealConfig.reset()
     T.reset()

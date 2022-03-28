@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Upcoming]
+## [0.3.0] - 2022-03-28
 
 ### Breaking Changes
 
@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Ability to set default color for error and warning [#22](https://github.com/Senth/tealprint/issues/22)
+- Can now disable unicode and colors, and both will be disabled if terminal lacks unicode support [#20](https://github.com/Senth/tealprint/issues/20)
 
 ## [0.2.2] - 2022-03-21
 
